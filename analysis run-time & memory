@@ -1,0 +1,126 @@
+Reading File
+
+function readAndValidateFile(filename)
+    open file(filename)  								O(1)
+    if file not opened successfully then  						O(1)
+        print "Error: Unable to open file"  						O(1)
+        return false  									O(1)
+    
+    create empty set validCourses  							O(1)
+    
+    while not end of file  								O(n) 
+        read line from file  								O(1)
+        split line into tokens using comma as delimiter  				O(n char/line) 
+        if number of tokens < 2 then							O(1)
+            print "Error: Invalid file format." 						O(1)
+            return false									O(1)
+        
+        courseNumber = tokens[0]  							O(1)
+        add courseNumber to validCourses  						O(1)
+
+    reset file pointer to beginning  							O(1)
+    
+    while not end of file 								O(n)
+        read line from file  								O(1)
+        split line into tokens using comma as delimiter 					O(n char/line)
+        for each prerequisite in tokens[2] to tokens[n]  					O(n prereqs)
+            if prerequisite not in validCourses then  					O(1)
+                print "Error: Prerequisite does not exist as a course."  			O(1)
+                return false  								O(1)
+    
+    close file  										O(1)
+    return true  										O(1)
+
+Worst: O(n*(n char/line + n prereqs))
+
+
+
+Vector
+
+function createCourseVector(filename)
+    create empty vector courses 							O(1)
+    
+    open file(filename)  								O(1)
+    while not end of file  								O(n)
+        read line from file 								O(1)
+        split line into tokens using comma as delimiter 					O(n char/line)
+        
+        create new Course object  							O(1)
+        set Course.courseNumber = tokens[0]  						O(1)
+        set Course.name = tokens[1]  							O(1)
+        for each prerequisite in tokens[2] to tokens[n]  					O(n prereqs)
+            add prerequisite to Course.prerequisites  					O(1)
+        
+        add Course to courses vector  							O(1) 
+
+    close file  										O(1)
+    return courses  									O(1)
+
+Worst: O(n*(n char/line + n prereqs))
+Advantages:
+Simple implementation
+Fast insertion (at the end)
+Disadvantages:
+Slow insertion/deletion in the middle 
+Slow search time 
+
+
+
+Hash Table
+
+function createCourseHashTable(filename)
+    create empty hash table courses  							O(1)
+    
+    open file(filename) 									O(1)
+    while not end of file  								O(n)
+        read line from file 								O(1)
+        split line into tokens using comma as delimiter 					O(n char/line)
+        
+        create new Course object  							O(1)
+        set Course.courseNumber = tokens[0] 						O(1)
+        set Course.name = tokens[1] 							O(1)
+        for each prerequisite in tokens[2] to tokens[n]  					O(n prereqs)
+            add prerequisite to Course.prerequisites  					O(1)
+        
+        insert Course into courses hash table using courseNumber as key  		O(1)
+    close file  										O(1)
+    return courses  									O(1)
+
+Worst: O(n*(n char/line + n prereqs))
+Advantages:
+Fast average-case insertion, deletion, and search
+Efficient for direct access by course number
+Disadvantages:
+Potential for collisions
+Not necessarily ordered
+
+
+
+BST
+
+function createCourseBST(filename)
+    create new BinarySearchTree courses  						O(1)
+    
+    open file(filename)  								O(1)
+    while not end of file  								O(n)
+        read line from file 								O(1)
+        split line into tokens using comma as delimiter 					O(n char/line)
+        
+        create new Course object 							O(1)
+        set Course.courseNumber = tokens[0]  						O(1)
+        set Course.name = tokens[1]  							O(1)
+        for each prerequisite in tokens[2] to tokens[n]  					O(n prereqs)
+            add prerequisite to Course.prerequisites  					O(1)
+        
+        courses.insert(Course)  								O(log n)
+
+    close file  										O(1)
+    return courses 									O(1)
+
+Worst: O(n * (n char/line + n prereqs + log n))
+Advantages:
+Efficient search, insertion, and deletion
+Maintains sorted order
+Disadvantages:
+Can degenerate in performance if unbalanced
+More complex implementation
