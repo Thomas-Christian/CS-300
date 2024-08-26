@@ -1,0 +1,56 @@
+void printCourses(vector<Node> courses) {
+    // vector for sort
+    vector<Course> coursesSorted;
+
+    for (const auto& node : courses) {
+        if (node.key != UINT_MAX) {
+            Node* current = const_cast<Node*>(&node);  // start at the first node
+
+            // traverse list and collect courses
+            while (current != nullptr) {
+                coursesSorted.push_back(current->course);
+                current = current->next;
+            }
+        }
+    }
+
+    // sort courses alphanumerically by course number
+    sort(coursesSorted.begin(), coursesSorted.end(), [](const Course& a, const Course& b) {
+        return a.courseNumber < b.courseNumber;
+    });
+
+    // print info
+    for (int i = 0; i < coursesSorted.size(); i++)
+    {
+        // remove extra endl for last course
+        if (i != coursesSorted.size() - 1) {
+            cout << "Course Number: " << coursesSorted.at(i).courseNumber << endl;
+            cout << "Course Title: " << coursesSorted.at(i).courseTitle << endl;
+            if (!coursesSorted.at(i).prerequisites.empty()) {
+                cout << "Prerequisites: ";
+                for (const auto& pre : coursesSorted.at(i).prerequisites) {
+                    cout << pre << " ";
+                }
+                cout << endl;
+            }
+            else {
+                cout << "Prerequisites: None" << endl;
+            }
+            cout << endl;
+        }
+        else {
+            cout << "Course Number: " << coursesSorted.at(i).courseNumber << endl;
+            cout << "Course Title: " << coursesSorted.at(i).courseTitle << endl;
+            if (!coursesSorted.at(i).prerequisites.empty()) {
+                cout << "Prerequisites: ";
+                for (const auto& pre : coursesSorted.at(i).prerequisites) {
+                    cout << pre << " ";
+                }
+                cout << endl;
+            }
+            else {
+                cout << "Prerequisites: None" << endl;
+            }
+        }
+    }
+}
